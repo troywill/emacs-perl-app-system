@@ -1,0 +1,33 @@
+* Your program
+#+BEGIN_SRC perl :tangle bin/your-program.pl :shebang #!/usr/bin/env perl :noweb yes
+<<configuration-chunk>>
+#+END_SRC
+  
+** Your program configuration
+*** AppConfig
+#+NAME: configuration-chunk
+#+BEGIN_SRC perl
+use AppConfig;
+
+# create a new AppConfig object
+my $config = AppConfig->new;
+
+# define a new variable
+# $config->define('LOCAL_DATABASE=s');
+$config->define("VAR1=s");
+
+# read configuration file
+$config->file('../conf.conf');
+
+my $VAR1 = $config->get("VAR1");
+
+print "VAR1 = $VAR1\n";
+#+END_SRC
+*** Configuration file
+#+BEGIN_SRC conf :tangle conf.conf
+VAR1=3.14
+#+END_SRC    
+*** [[http://search.cpan.org/~abw/AppConfig/][AppConfig]] by [[http://search.cpan.org/~abw/][Andy Wardley]]
+*** [[http://search.cpan.org/~adamk/Config-Tiny/][Config::Tiny]] by [[http://search.cpan.org/~adamk/][Adam Kennedy]]
+    - used in Perlcritic in Critic/UserProfile.pm
+    
