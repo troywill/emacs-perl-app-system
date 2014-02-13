@@ -1,8 +1,20 @@
 * Your program
 #+BEGIN_SRC perl :tangle bin/your-program.pl :shebang #!/usr/bin/env perl :noweb yes
+<<pragma-chunk>>
+# read-config-chunk ??
 <<configuration-chunk>>
+<<get-options-chunk>>
 #+END_SRC
-  
+** pragma-chunk (http://perldoc.perl.org/perlpragma.html)
+   #+BEGIN_SRC perl
+     use warnings;
+     use strict;
+     use Getopt::Long;
+     use FindBin qw($Bin);
+     use File::Basename;
+     use lib "$Bin/../lib";
+     require "foscam-perllib.pm";
+   #+END_SRC
 ** Your program configuration
 *** AppConfig
 #+NAME: configuration-chunk
@@ -30,4 +42,25 @@ VAR1=3.14
 *** [[http://search.cpan.org/~abw/AppConfig/][AppConfig]] by [[http://search.cpan.org/~abw/][Andy Wardley]]
 *** [[http://search.cpan.org/~adamk/Config-Tiny/][Config::Tiny]] by [[http://search.cpan.org/~adamk/][Adam Kennedy]]
     - used in Perlcritic in Critic/UserProfile.pm
-    
+** Your program library
+*** foscam-perllib.pm
+    #+BEGIN_SRC perl :tangle lib/foscam-perllib.pm :padline no :noweb yes
+      use warnings;
+      use strict;
+      <<make-image-dir-subroutine>>
+      1;
+    #+END_SRC    
+**** The make_image_directory subroutine
+     #+name: make-image-dir-subroutine
+     #+BEGIN_SRC perl
+       sub make_image_dir {
+           use File::Path qw(make_path);
+           my ( $base_dir, $camera_name ) = @_;
+           my ( $year, $mon, $day, $hour, $min, $sec ) = foscam_localtime();
+           my $directory = "$base_dir/$year/$mon/$day/$camera_name/";
+           if ( ! -e $directory ) {
+               make_path($directory, { verbose => 1 }) or die "Unable to mkdir --parent $directory";
+           }
+           return $directory;
+       }
+     #+END_SRC    
