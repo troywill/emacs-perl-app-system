@@ -6,6 +6,7 @@
 <<get-options-chunk>>
 #+END_SRC
 ** pragma-chunk (http://perldoc.perl.org/perlpragma.html)
+   #+NAME: pragma-chunk
    #+BEGIN_SRC perl
      use warnings;
      use strict;
@@ -29,7 +30,9 @@ my $config = AppConfig->new;
 $config->define("VAR1=s");
 
 # read configuration file
-$config->file('../conf.conf');
+
+print "$Bin <==\n";
+$config->file("$Bin/../conf.conf");
 
 my $VAR1 = $config->get("VAR1");
 
@@ -64,3 +67,4 @@ VAR1=3.14
            return $directory;
        }
      #+END_SRC    
+* Testing => http://www.perl.org/about/whitepapers/perl-testing.html
