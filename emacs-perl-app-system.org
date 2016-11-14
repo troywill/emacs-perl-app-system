@@ -1,69 +1,51 @@
 * Step By Step
-  1. [0/4] Preliminary Setup
-     1. [ ] Specify application name
-	#+NAME: application_name
-	#+BEGIN_SRC conf
-	  myapp
-	#+END_SRC
-     2. [ ] Specify application directory, e.g., /home/troy/myapp
-	#+NAME: application_directory
-	#+BEGIN_SRC conf
-	   ~/rideshare
-	#+END_SRC
-     3. [ ] Create the application directory if it doesn't already exist file:./tmp/make_app_dir.sh
-	#+BEGIN_SRC shell :tangle ./tmp/make_app_dir.sh :shebang #!/usr/bin/env bash :noweb yes 
-	  mkdir --parent --verbose <<application_directory>>
-	#+END_SRC
-     4. [ ] copy this Org file to ~/path/to/app file:./tmp/copy
-	#+BEGIN_SRC shell :tangle ./tmp/copy :shebang /usr/bin/bash :noweb yes
-	  cp --interactive --verbose ./emacs-perl-app-system.org <<application_directory>>/<<application_name>>.org
-	#+END_SRC
-* MAIN PROGRAM file:./bin/NEW_PROGRAM.pl
-  #+BEGIN_SRC perl :tangle ./bin/NEW_PROGRAM.pl :shebang #!/usr/bin/env perl :noweb yes
-    <<NEW_PROGRAM-pragma-block>>
-    <<NEW_PROGRAM-path-block>>
-    <<NEW_PROGRAM-configuration-block>>
-    print "DEBUG: ==>$help<==\n";
+  1. [ ] replace 'MY_PROGRAM_NAME' with the name of your Perl program in this Org file
+  2. [ ] run shell script to set up program directories
+     #+BEGIN_SRC shell
+     mkdir bin lib conf testing troubleshooting
+       # rm -rvf bin lib conf testing troubleshooting
+     #+END_SRC
+  3. [ ] tangle files
+     #+BEGIN_SRC example
+       C-c C-v C-t runs the command org-babel-tangle (found in org-mode-map),
+     #+END_SRC
+* MAIN PROGRAM <file:./bin/MY_PROGRAM_NAME>
+  #+BEGIN_SRC perl :tangle ./bin/MY_PROGRAM_NAME :shebang #!/usr/bin/env perl :noweb yes
+    <<PRAGMA_BLOCK>>
+    <<PATH_BLOCK>>
+    <<CONFIGURATION_BLOCK>>
+    <<MAIN_PROGRAM_LOGIC>>
+
     help() if $help;
-    <<help_subroutine>>
-
+    <<HELP_SUBROUTINE>>
   #+END_SRC
-** help_subroutine
-   #+NAME: help_subroutine
-   #+BEGIN_SRC perl
-     sub help {
-         print <<END;
-         --calibrate
-	 --two_pi
-	 --surgeonly
-	 --verbose
-	 --zoom
-     END
-         exit;
-     }
-   #+END_SRC
-
-** NEW_PROGRAM pragma-block
+** PRAGMA_BLOCK
    + See http://perldoc.perl.org/perlpragma.html
-   #+NAME: NEW_PROGRAM-pragma-block
+   #+NAME: PRAGMA_BLOCK
    #+BEGIN_SRC perl
+     use v5.24.0;
      use warnings;
      use strict;
    #+END_SRC
-** NEW_PROGRAM path-block
-   #+NAME: NEW_PROGRAM-path-block
+** PATH_BLOCK <file:./bin/MY_PROGRAM_NAME::PATH_BLOCK> 
+   + http://perldoc.perl.org/FindBin.html
+   #+NAME: PATH_BLOCK
    #+BEGIN_SRC perl
-     ###### path-block ############
-     use FindBin qw($Bin);        #
-     use File::Basename;          #
-     use lib "$Bin/../lib";       #
-     require "NEW_PROGRAM.pm";    #
-     ##############################
+
+     ########## PATH_BLOCK_BEGIN ##########
+     # Set paths and load program modules
+     use FindBin qw($Bin);
+     use File::Basename;
+     use lib "$Bin/../lib";
+     require "MY_PROGRAM_NAME.pm";
+     ########## PATH_BLOCK_END ############
    #+END_SRC
-** NEW_PROGRAM configuration-block
-   #+NAME: NEW_PROGRAM-configuration-block
+** CONFIGURATION_BLOCK <file:./bin/MY_PROGRAM_NAME::CONFIGURATION_BLOCK> 
+   + See http://search.cpan.org/~neilb/AppConfig/
+   #+NAME: CONFIGURATION_BLOCK
    #+BEGIN_SRC perl
-     ########## BEGIN CONFIGURATION ##########
+
+     ########## CONFIGURATION_BLOCK_BEGIN ##########
      use AppConfig;                               
      # create a new AppConfig object
      my $config = AppConfig->new( );
@@ -74,7 +56,7 @@
      $config->define("VAR1=s");                   
 
      # read configuration file                    
-     $config->file("$Bin/../conf/NEW_PROGRAM.conf");
+     $config->file("$Bin/../conf/MY_PROGRAM_NAME.conf");
 
      # parse command line options
      $config->getopt();
@@ -82,12 +64,10 @@
      my $VAR1 = $config->get("VAR1");
      my $help = $config->get("help");
      my $verbose = $config->get("verbose");
-     print "$Bin <==\n" if $verbose;                          
-
-     ############ END CONFIGURATION ############
+     ############ CONFIGURATION_BLOCK_END ##############
    #+END_SRC
-*** Configuration file
-    #+BEGIN_SRC conf :tangle ./conf/NEW_PROGRAM.conf
+*** Configuration file <file:./conf/MY_PROGRAM_NAME.conf>
+    #+BEGIN_SRC conf :tangle ./conf/MY_PROGRAM_NAME.conf
       VAR1=3.14
     #+END_SRC    
 *** [[http://search.cpan.org/~abw/AppConfig/][AppConfig]] by [[http://search.cpan.org/~abw/][Andy Wardley]]
@@ -128,10 +108,40 @@
        # parse CGI parameters (GET method)
        $config->cgi($query);       # default to $ENV{ QUERY_STRING }
      #+END_SRC
-** NEW_PROGRAM command-line-options-block
-   #+NAME: NEW_PROGRAM-command-line-options-block
+** MAIN_PROGRAM_LOGIC <file:./bin/MY_PROGRAM_NAME::MAIN_PROGRAM_LOGIC_BEGIN>
+   TBL_NAME: MAIN_VARIABLE_TABLE
+   | Variable | Description | Remark |
+   |----------+-------------+--------|
+   |          |             |        |
+   #+NAME: MAIN_PROGRAM_LOGIC
    #+BEGIN_SRC perl
-     ########## BEGIN GETOPTIONS BLOCK ########## FOO
+
+     ########## MAIN_PROGRAM_LOGIC_BEGIN ##########
+     say "Hello, world!";
+     subroutine_1();
+     subroutine_2();
+     subroutine_3();
+     ########## MAIN_PROGRAM_LOGIC_END ############
+   #+END_SRC
+** HELP_SUBROUTINE <file:./bin/MY_PROGRAM_NAME::HELP_SUBROUTINE>
+   #+NAME: HELP_SUBROUTINE
+   #+BEGIN_SRC perl
+
+     ########## HELP_SUBROUTINE_BEGIN ##########
+     sub help {
+         print <<END;
+	 --help
+	 --verbose
+	 --debug
+     END
+         exit;
+     }
+     ########## HELP_SUBROUTINE_END ############
+   #+END_SRC
+** COMMAND_LINE_OPTIONS_BLOCK
+   #+NAME: MY_PROGRAM_NAME-command-line-options-block
+   #+BEGIN_SRC perl
+     ########## BEGIN GETOPTIONS BLOCK ##########
      use Getopt::Long;
      my ($zoom, $screenshot, $verbose, $help);
 
@@ -142,84 +152,37 @@
          or die("Error in command line arguments\n");
      ########## END GETOPTIONS BLOCK ############
    #+END_SRC
-* NEW_PROGRAM Library (NEW_PROGRAM.pm)
-** NEW_PROGRAM.pm
-   #+BEGIN_SRC perl :tangle ./lib/NEW_PROGRAM.pm :padline no :noweb yes
+* LIBRARY (file:./lib/MY_PROGRAM_NAME.pm) 
+** MY_PROGRAM_NAME.pm
+   #+BEGIN_SRC perl :tangle ./lib/MY_PROGRAM_NAME.pm :padline no :noweb yes
      use warnings;
      use strict;
-     <<make-image-dir-subroutine>>
-     <<second-subroutine>>
-     <<third-subroutine>>
+     <<SUBROUTINE_1>>
+     <<SUBROUTINE_2>>
+     <<SUBROUTINE_3>>
      1;
    #+END_SRC    
-*** make-image_dir-subroutine
-    #+name: make-image-dir-subroutine
+*** SUBROUTINE_1 <file:./lib/MY_PROGRAM_NAME.pm::subroutine_1> 
+    #+name: SUBROUTINE_1
     #+BEGIN_SRC perl
-      sub make_image_dir {
-          use File::Path qw(make_path);
-          my ( $base_dir, $camera_name ) = @_;
-          my ( $year, $mon, $day, $hour, $min, $sec ) = foscam_localtime();
-          my $directory = "$base_dir/$year/$mon/$day/$camera_name/";
-          if ( ! -e $directory ) {
-              make_path($directory, { verbose => 1 }) or die "Unable to mkdir --parent $directory";
-          }
-          return $directory;
+      sub subroutine_1 {
+          print "subroutine_1: ", my $date = localtime(), "\n";
       }
     #+END_SRC    
-*** NEW_PROGRAM-second_subroutine
-*** NEW_PROGRAM-third-subroutine
+*** SUBROUTINE_2 <file:./lib/MY_PROGRAM_NAME.pm::subroutine_2> 
+    #+name: SUBROUTINE_2
+    #+BEGIN_SRC perl
+      sub subroutine_2 {
+          return 1;
+      }
+    #+END_SRC    
+*** SUBROUTINE_3 <file:./lib/MY_PROGRAM_NAME.pm::subroutine_3> 
+    #+name: SUBROUTINE_3
+    #+BEGIN_SRC perl
+      sub subroutine_3 {
+          return 1;
+      }
+    #+END_SRC    
 * Testing => http://www.perl.org/about/whitepapers/perl-testing.html
-** ./testing/appconfig-args.pl
-   #+BEGIN_SRC perl :tangle ./testing/appconfig-args.pl :shebang #!/usr/bin/perl
-     #!/usr/bin/perl
-     # appconfig-args.pl
-
-     use AppConfig;
-
-     my $config = AppConfig->new;
-     my $verbose;
-
-     $config->define( 'network_email=s'  );
-     $config->define( 'book_author=s'    );
-     $config->define( 'book_title=s'     );
-     $config->define( 'book_publisher=s' );
-     $verbose = $config->define("verbose");
-     print "DEBUG1: $verbose\n";
-
-     $config->file( 'config.ini' );
-
-     my $email  = $config->get( 'network_email' );
-     my $author = $config->get( 'book_author' );
-     # $verbose = $config->get( 'verbose' );
-     print "DEBUG2: $verbose\n";
-
-     $config->args();
-     #  $config->getopt();
-
-     print "Kindly send complaints to $author ($email)\n";
-     print "DEBUG3: $verbose\n";
-   #+END_SRC
-   #+BEGIN_SRC conf :tangle ./testing/config.ini
-     network_email=brian.d.foy@gmail.com
-     book_author=brian d foy
-     verbose = On
-   #+END_SRC
-   #+BEGIN_SRC sh
-     ./appconfig-args.pl -network_email troydwill@gmail.com
-   #+END_SRC
 * Troubleshooting
-** AppConfig Flag
-   #+BEGIN_SRC perl :tangle ./troubleshooting/appconfig-flag.pl :shebang #!/usr/bin/env perl
-     # appconfig-flag.pl
-
-     use AppConfig;
-
-     my $config = AppConfig->new;
-
-     $verbose = $config->define( 'verbose' );
-
-     $config->getopt();
-
-     my $verbose  = $config->get( 'verbose' );
-     print "verbose = $verbose\n";
-   #+END_SRC
+* Developer's Log
