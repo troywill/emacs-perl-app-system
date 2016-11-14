@@ -19,6 +19,23 @@
     help() if $help;
     <<HELP_SUBROUTINE>>
   #+END_SRC
+** MAIN_PROGRAM_LOGIC <file:./bin/MY_PROGRAM_NAME::MAIN_PROGRAM_LOGIC_BEGIN>
+*** TABLE OF VARIABLES
+    TBL_NAME: MAIN_VARIABLE_TABLE
+    | Variable | Description | Remark |
+    |----------+-------------+--------|
+    |          |             |        | 
+*** MAIN_PROGRAM_LOGIC_CODE
+    #+NAME: MAIN_PROGRAM_LOGIC
+    #+BEGIN_SRC perl
+
+      ########## MAIN_PROGRAM_LOGIC_BEGIN ##########
+      say "Hello, world!";
+      subroutine_1();
+      subroutine_2();
+      subroutine_3();
+      ########## MAIN_PROGRAM_LOGIC_END ############
+   #+END_SRC
 ** PRAGMA_BLOCK
    + See http://perldoc.perl.org/perlpragma.html
    #+NAME: PRAGMA_BLOCK
@@ -108,21 +125,6 @@
        # parse CGI parameters (GET method)
        $config->cgi($query);       # default to $ENV{ QUERY_STRING }
      #+END_SRC
-** MAIN_PROGRAM_LOGIC <file:./bin/MY_PROGRAM_NAME::MAIN_PROGRAM_LOGIC_BEGIN>
-   TBL_NAME: MAIN_VARIABLE_TABLE
-   | Variable | Description | Remark |
-   |----------+-------------+--------|
-   |          |             |        |
-   #+NAME: MAIN_PROGRAM_LOGIC
-   #+BEGIN_SRC perl
-
-     ########## MAIN_PROGRAM_LOGIC_BEGIN ##########
-     say "Hello, world!";
-     subroutine_1();
-     subroutine_2();
-     subroutine_3();
-     ########## MAIN_PROGRAM_LOGIC_END ############
-   #+END_SRC
 ** HELP_SUBROUTINE <file:./bin/MY_PROGRAM_NAME::HELP_SUBROUTINE>
    #+NAME: HELP_SUBROUTINE
    #+BEGIN_SRC perl
@@ -138,22 +140,9 @@
      }
      ########## HELP_SUBROUTINE_END ############
    #+END_SRC
-** COMMAND_LINE_OPTIONS_BLOCK
-   #+NAME: MY_PROGRAM_NAME-command-line-options-block
-   #+BEGIN_SRC perl
-     ########## BEGIN GETOPTIONS BLOCK ##########
-     use Getopt::Long;
-     my ($zoom, $screenshot, $verbose, $help);
-
-     GetOptions ("zoom=i" => \$zoom,               # numeric
-                 "screenshot=s"   => \$screenshot, # string
-                 "verbose"  => \$verbose,          # flag
-                 "help"     => \$help )            # flag
-         or die("Error in command line arguments\n");
-     ########## END GETOPTIONS BLOCK ############
-   #+END_SRC
 * LIBRARY (file:./lib/MY_PROGRAM_NAME.pm) 
 ** MY_PROGRAM_NAME.pm
+*** Complete MY_PROGRAM_NAME.pm <file:./lib/MY_PROGRAM_NAME.pm> 
    #+BEGIN_SRC perl :tangle ./lib/MY_PROGRAM_NAME.pm :padline no :noweb yes
      use warnings;
      use strict;
